@@ -3,22 +3,23 @@ var axios = require('axios');
 var APPID_QUERYSTRING = '&APPID=6233db89dbcfbfe8650e71e610a1b7ec';
 var API_ENDPOINT = 'http://api.openweathermap.org/data/2.5/';
 
+var callGet = url => {
+    return axios.get(url)
+    .then(result => {
+        return result.data;
+    });
+}
+
 var apiClient = {
-    fetchCurrentWeather: function(city, callBack){
+    fetchCurrentWeather: function(city){
         var url = API_ENDPOINT + 'weather?type=accurate&q=' + city + APPID_QUERYSTRING;
-        axios.get(url)
-            .then(function(result){
-                callBack(result.data);
-            });
+        return callGet(url);
+
     },
     fetchFiveDayForcast: function(city) {
-        var url = API_ENDPOINT + 'forecast/hourly?type=accurate&cnt=5&q=' + city + APPID_QUERYSTRING;
-        axios.get(url)
-            .then(function(result){
-                console.log(result);
-            });
+        var url = API_ENDPOINT + 'forecast?type=accurate&cnt=8&q=' + city + APPID_QUERYSTRING;
+        return callGet(url);
     }
-
 };
 
 module.exports = apiClient;

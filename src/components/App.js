@@ -1,6 +1,11 @@
 var React = require('react');
 var ZipCode = require('./ZipCode');
-var apiClient = require('../utils/apiClient');
+var ReactRouter = require('react-router-dom');
+var BrowserRouter = ReactRouter.BrowserRouter;
+var Route = ReactRouter.Route;
+var Switch = ReactRouter.Switch;
+var Forecast = require('./Forecast');
+var Detail = require('./Detail');
 
 class App extends React.Component {
     constructor(props){
@@ -11,8 +16,8 @@ class App extends React.Component {
         }
 
         this.updateCity = this.updateCity.bind(this);
-        this.getWeather = this.getWeather.bind(this);
         this.updateWeather = this.updateWeather.bind(this);
+        this.renderHomeContainer = this.renderHomeContainer.bind(this);
     }
 
     updateCity (text) {
@@ -23,24 +28,32 @@ class App extends React.Component {
         this.setState(() => { return {weather} });
     };
 
-    getWeather () {
-        apiClient.fetchCurrentWeather(this.state.city, this.updateWeather);
+    renderHomeContainer() {
+        return(
+            <div className="main-container" >
+                <h1 className='header'>Enter a City and State</h1>
+                <ZipCode direction="column" text={this.state.city} updateCity={this.updateCity}/>
+            </div>
+        );
     }
 
     render()
     {
-        console.log(this.state.weather);
         return (
-            <div className="container">
-                <div className="navbar">
-                    <h1>React Weather :)</h1>
-                    <ZipCode direction="row" text={this.state.city} updateCity={this.updateCity} onSubmit={this.getWeather}/>
+            <BrowserRouter>
+                <div className="container">
+                    <div className="navbar">
+                        <h1>React to the Weather :)</h1>
+                        <ZipCode direction="row" text={this.state.city} updateCity={this.updateCity}/>
+                    </div>
+                    <Switch>
+                        <Route exact path='/' render={()=> this.renderHomeContainer() } />
+                        <Route path='/forecast' render={props => <Forecast key={props.location.search} location={props.location} />} />
+                        <Route path='/detail' component={Detail} />
+                        <Route render={()=> <p>Not Found</p>} />
+                    </Switch>               
                 </div>
-                <div className="home-container" style={{backgroundImage: "url('src/pattern.svg')"}}>
-                    <h1 className='header'>Enter a City and State</h1>
-                    <ZipCode direction="column" text={this.state.city} updateCity={this.updateCity} onSubmit={this.getWeather} />
-                </div>
-            </div>
+            </BrowserRouter>
         );
     }
 }

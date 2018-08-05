@@ -1,5 +1,6 @@
 var React = require('react');
 var PropTypes = require('prop-types');
+var Link = require('react-router-dom').Link;
 
 class ZipCode extends React.Component {
     constructor (props) {
@@ -17,16 +18,26 @@ class ZipCode extends React.Component {
         return (
             <div className="zipcode-container" style={{flexDirection: this.props.direction}}>
                 <input 
-                    placeholder="Seattle, Washington" 
+                    placeholder="City, State" 
                     className='form-control'
                     type='text'
                     value={this.props.text}
                     onChange={this.handleChange}/>
-                <button
-                    type='button'
-                    style={{margin: 10}}
-                    className='btn btn-success'
-                    onClick={this.props.onSubmit}>Get Weather</button>
+                    <Link 
+                        className='btn btn-success' 
+                        onClick={e => {
+                            if(!this.props.text){
+                                 e.preventDefault()
+                                }
+                            }
+                        }
+
+                        style={{margin: 10, textDecoration: 'none'}}
+                        to={{
+                            pathname: '/forecast',
+                            search: '?city=' + this.props.text
+                        }}
+                        >Get Weather</Link>
             </div>
         );
     }
@@ -35,7 +46,6 @@ class ZipCode extends React.Component {
 ZipCode.propTypes = {
     direction: PropTypes.string.isRequired,
     updateCity: PropTypes.func.isRequired,
-    onSubmit: PropTypes.func.isRequired,
     text: PropTypes.string
 };
 
