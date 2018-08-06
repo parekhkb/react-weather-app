@@ -46,7 +46,9 @@ class Forecast extends React.Component{
         if(this.state.error){
             return (
                 <div className="main-container">
-                    <h1>Error occured, please double check your city.</h1>
+                    <h1>Error</h1>
+                    <h2>Please double check your search</h2>
+                    <h2>state abreviations are not accepted</h2>
                 </div>
             );
         }

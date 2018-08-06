@@ -1,5 +1,5 @@
 var React = require('react');
-var ZipCode = require('./ZipCode');
+var SearchBar = require('./SearchBar');
 var ReactRouter = require('react-router-dom');
 var BrowserRouter = ReactRouter.BrowserRouter;
 var Route = ReactRouter.Route;
@@ -32,8 +32,8 @@ class App extends React.Component {
     renderHomeContainer() {
         return(
             <div className="main-container" >
-                <h1 className='header'>Enter a City and State</h1>
-                <ZipCode direction="column" text={this.state.city} updateCity={this.updateCity}/>
+                <h1 className='header'>Enter a Location</h1>
+                <SearchBar direction="column" text={this.state.city} updateCity={this.updateCity}/>
             </div>
         );
     }
@@ -45,7 +45,7 @@ class App extends React.Component {
                 <div className="container">
                     <div className="navbar">
                         <Link to='/' className='home-link'>React to the Weather :)</Link>
-                        <ZipCode direction="row" text={this.state.city} updateCity={this.updateCity}/>
+                        <SearchBar direction="row" text={this.state.city} updateCity={this.updateCity}/>
                     </div>
                     <Switch>
                         <Route exact path='/' render={()=> this.renderHomeContainer() } />
