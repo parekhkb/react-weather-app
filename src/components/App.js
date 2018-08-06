@@ -6,6 +6,7 @@ var Route = ReactRouter.Route;
 var Switch = ReactRouter.Switch;
 var Forecast = require('./Forecast');
 var Detail = require('./Detail');
+var Link = ReactRouter.Link;
 
 class App extends React.Component {
     constructor(props){
@@ -43,7 +44,7 @@ class App extends React.Component {
             <BrowserRouter>
                 <div className="container">
                     <div className="navbar">
-                        <h1>React to the Weather :)</h1>
+                        <Link to='/' className='home-link'>React to the Weather :)</Link>
                         <ZipCode direction="row" text={this.state.city} updateCity={this.updateCity}/>
                     </div>
                     <Switch>
