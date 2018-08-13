@@ -1,39 +1,39 @@
-var React = require('react');
-var PropTypes = require('prop-types');
-var RouterDOM = require('react-router-dom');
-var Link = RouterDOM.Link;
-var withRouter = RouterDOM.withRouter;
+import React, { Component }  from 'react';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
-class SearchBar extends React.Component {
-    constructor (props) {
-        super(props);
-
-        this.handleChange = this.handleChange.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
+class SearchBar extends Component {
+    static propTypes = {
+        direction: PropTypes.string.isRequired,
+        updateCity: PropTypes.func.isRequired,
+        text: PropTypes.string
     }
 
-    handleChange (event) {
-        var text = event.target.value;
+    handleChange = (event) => {
+        const text = event.target.value;
         this.props.updateCity(text);
     }
 
-    onSubmit(event){
+    onSubmit = (event) => {
         event.preventDefault();
-        if(!this.props.text) {
+        const { text } = this.props;
+        if(!text) {
             return;
         }
 
-        this.props.history.push('/forecast?city=' + this.props.text);
+        this.props.history.push(`/forecast?city=${text}`);
     }
 
     render() {
+        const { direction, text } = this.props;
+
         return (
-            <form className="searchbar-container" style={{flexDirection: this.props.direction}} onSubmit={this.onSubmit}>
+            <form className="searchbar-container" style={{flexDirection: direction}} onSubmit={this.onSubmit}>
                 <input 
                     placeholder="City, State" 
                     className='form-control'
                     type='text'
-                    value={this.props.text}
+                    value={text}
                     onChange={this.handleChange}/>
                 <button type='submit' className='btn btn-success'>Get Weather</button>
             </form>
@@ -41,10 +41,4 @@ class SearchBar extends React.Component {
     }
 }
 
-SearchBar.propTypes = {
-    direction: PropTypes.string.isRequired,
-    updateCity: PropTypes.func.isRequired,
-    text: PropTypes.string
-};
-
-module.exports = withRouter(SearchBar);
+export default withRouter(SearchBar);

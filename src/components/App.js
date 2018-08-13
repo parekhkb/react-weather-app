@@ -1,45 +1,35 @@
-var React = require('react');
-var SearchBar = require('./SearchBar');
-var ReactRouter = require('react-router-dom');
-var BrowserRouter = ReactRouter.BrowserRouter;
-var Route = ReactRouter.Route;
-var Switch = ReactRouter.Switch;
-var Forecast = require('./Forecast');
-var Detail = require('./Detail');
-var Link = ReactRouter.Link;
+import React, { Component } from 'react';
+import SearchBar from './SearchBar';
+import Forecast from './Forecast';
+import Detail from './Detail';
+import {
+    BrowserRouter,
+    Route,
+    Link,
+    Switch
+} from 'react-router-dom';
 
-class App extends React.Component {
-    constructor(props){
-        super(props);
-
-        this.state={
-            city: ''
-        }
-
-        this.updateCity = this.updateCity.bind(this);
-        this.updateWeather = this.updateWeather.bind(this);
-        this.renderHomeContainer = this.renderHomeContainer.bind(this);
+class App extends Component {
+    state = {
+        city: ''
     }
 
-    updateCity (text) {
+    updateCity = text => {
         this.setState(function() { return { city: text }});
     }
 
-    updateWeather (weather) {
-        this.setState(() => { return {weather} });
+    updateWeather = weather => {
+        this.setState(() => ({weather}) );
     };
 
-    renderHomeContainer() {
-        return(
-            <div className="main-container" >
-                <h1 className='header'>Enter a Location</h1>
-                <SearchBar direction="column" text={this.state.city} updateCity={this.updateCity}/>
-            </div>
-        );
-    }
+    renderHomeContainer = () => (
+        <div className="main-container" >
+            <h1 className='header'>Enter a Location</h1>
+            <SearchBar direction="column" text={this.state.city} updateCity={this.updateCity}/>
+        </div>
+    );
 
-    render()
-    {
+    render() {
         return (
             <BrowserRouter>
                 <div className="container">
@@ -59,4 +49,4 @@ class App extends React.Component {
     }
 }
 
-module.exports = App;
+export default App;

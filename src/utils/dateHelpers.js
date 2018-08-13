@@ -1,5 +1,12 @@
-var moment = require('moment');
+import moment from 'moment';
 
-module.exports = {
-    getMoment: seconds=> {return moment(new Date(seconds * 1000))}
-}
+const getMoment = seconds => moment(new Date(seconds * 1000));
+
+const getDateString = dt => getMoment(dt).format("dddd, MMMM Do YYYY");
+
+const getTimeString = dt => getMoment(dt).format("h:mm:ss A");
+
+export {
+    getDateString,
+    getTimeString
+};

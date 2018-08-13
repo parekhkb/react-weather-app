@@ -1,9 +1,9 @@
-var path = require('path');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var webpack = require('webpack');
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
-var config = {
-    entry: './src/index.js',
+const config = {
+    entry: ['babel-polyfill','whatwg-fetch','./src/index.js'],
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'index_bundle.js',
@@ -19,6 +19,7 @@ var config = {
     devServer: {
         historyApiFallback: true
     },
+    devtool: "source-map",
     plugins: [
       new HtmlWebpackPlugin({
         template: 'src/index.html'

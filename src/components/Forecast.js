@@ -1,41 +1,40 @@
-var React = require('react');
-var apiClient = require('../utils/apiClient');
-var QueryString = require('query-string');
-var Link = require('react-router-dom').Link;
-var getMoment = require('../utils/dateHelpers').getMoment;
+import React, { Component }  from 'react';
+import QueryString from 'query-string';
+import { fetchFiveDayForcast } from '../utils/apiClient';
+import { Link } from 'react-router-dom';
+import {getTimeString} from '../utils/dateHelpers';
 
-class Forecast extends React.Component{
-    constructor(props){
-        super(props);       
-        
-        this.state = {
-            data: null,
-            loading: true,
-            error:false,
-        };
-
-        this.fetchData = this.fetchData.bind(this);
-        this.fetchData();
+class Forecast extends Component{
+    state = {
+        data: null,
+        loading: true,
+        error:false,
     }
 
     componentDidMount(){
         this.fetchData();
     }
     
-    fetchData() {
-        var parsed = QueryString.parse(this.props.location.search);
-        apiClient.fetchFiveDayForcast(parsed.city)
-                .then(data => this.setState(() => { 
-                    return {
-                        loading: false,
-                        data: data
-                    };
-                }))
-                .catch(()=>this.setState(()=>{return {loading:false, error:true}}));               
+    fetchData = async () => {
+        const parsed = QueryString.parse(this.props.location.search);
+        try {
+            const data = await fetchFiveDayForcast(parsed.city);
+            this.setState(() => ({
+                loading: false,
+                data: data
+            }));
+        } catch(e) {
+            this.setState(()=>({
+                loading:false,
+                error:true
+            }));
+        }
     }
 
     render() {
-        if(this.state.loading){
+        const { loading, error, data } = this.state;
+
+        if(loading){
             return (
                 <div className="main-container">
                     <h1>Loading...</h1>
@@ -43,7 +42,7 @@ class Forecast extends React.Component{
             );
         }
 
-        if(this.state.error){
+        if(error){
             return (
                 <div className="main-container">
                     <h1>Error</h1>
@@ -53,16 +52,14 @@ class Forecast extends React.Component{
             );
         }
 
-        var cityInfo = this.state.data.city;
-        var forcastList = this.state.data.list;
-        var location = cityInfo.name + ', ' + cityInfo.country;
-        console.log(this.state.data)
+        const { city, list } = data;
+        const location = city.name + ', ' + city.country;
         return (
             <div className="main-container">
                 <h1>{location}</h1>
                 <h2>24 Hour Forecast</h2>
                 <div className='forecast-container'>
-                    {forcastList.map(d=> <WeatherDay key={d.dt} data={d} city={location} />)}
+                    {list.map(d=> <WeatherDay key={d.dt} data={d} city={location} />)}
                 </div>
             </div>
         );
@@ -70,18 +67,19 @@ class Forecast extends React.Component{
 }
 
 function WeatherDay(props){
-    var weather = props.data.weather[0];
-    var time = getMoment(props.data.dt).format("h:mm A");
+    const {city, data} = props;
+    const [{icon, description}] = data.weather;
+    const time = getTimeString(data.dt);
     return (
         <Link className='weather-day' to={{ 
-            pathname:'/detail/' + props.city, 
-            state: { data: props.data }
+            pathname:`/detail/${city}`, 
+            state: { data }
         }} >
             <span>{time}</span>
-            <img src={'http://openweathermap.org/img/w/' + weather.icon + '.png'} style={{height:'100px', width:'100px'}} />
-            <span>{weather.description}</span>
+            <img src={`http://openweathermap.org/img/w/${icon}.png`} style={{height:'100px', width:'100px'}} />
+            <span>{description}</span>
         </Link>
     );
 }
 
-module.exports = Forecast;
+export default Forecast;
