@@ -7,11 +7,9 @@ const callGet = async url => {
 }
 
 export function fetchCurrentWeather(city) {
-    const url = `${API_ENDPOINT}/weather?type=accurate&q=${city}&${APPID_QUERYSTRING}`;
-    return callGet(url);
+    return callGet(`${API_ENDPOINT}/weather?type=accurate&q=${city}&${APPID_QUERYSTRING}`);
 }
 
 export function fetchFiveDayForcast(city) {
-    const url = `${API_ENDPOINT}/forecast?type=accurate&cnt=8&q=${city}&${APPID_QUERYSTRING}`;
-    return callGet(url);
+    return callGet(`${API_ENDPOINT}/forecast?type=accurate&cnt=8&q=${city}&${APPID_QUERYSTRING}`);
 }

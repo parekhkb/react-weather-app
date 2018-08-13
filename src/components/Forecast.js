@@ -52,8 +52,8 @@ class Forecast extends Component{
             );
         }
 
-        const { city, list } = data;
-        const location = city.name + ', ' + city.country;
+        const { city:{ name, country }, list } = data;
+        const location = `${name}, ${country}`;
         return (
             <div className="main-container">
                 <h1>{location}</h1>
